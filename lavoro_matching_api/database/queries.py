@@ -6,7 +6,7 @@ from lavoro_matching_api.database import db
 
 def get_matches_by_applicant(applicant_account_id: uuid.UUID):
     query_tuple = (
-        "SELECT * FROM matches WHERE applicant_account_id = %s",
+        "SELECT * FROM matches WHERE applicant_account_id = %s AND approved_by_applicant IS NULL",
         (applicant_account_id,),
     )
 
@@ -19,7 +19,7 @@ def get_matches_by_applicant(applicant_account_id: uuid.UUID):
 
 def get_matches_by_job_post(job_post_id: uuid.UUID):
     query_tuple = (
-        "SELECT * FROM matches WHERE job_post_id = %s",
+        "SELECT * FROM matches WHERE job_post_id = %s AND approved_by_applicant IS NULL",
         (job_post_id,),
     )
     result = db.execute_one(query_tuple)
@@ -27,3 +27,13 @@ def get_matches_by_job_post(job_post_id: uuid.UUID):
         return [Match(**row) for row in result["result"]]
     else:
         return []
+
+
+def reject_match(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "UPDATE matches SET approved_by_applicant = FALSE WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1
