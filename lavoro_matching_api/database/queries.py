@@ -29,6 +29,12 @@ def get_matches_by_job_post(job_post_id: uuid.UUID):
         return []
 
 
+def delete_matches(job_post_id: uuid.UUID):
+    query_tuple = ("DELETE FROM matches WHERE job_post_id = %s", (job_post_id,))
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] > 1
+
+
 def reject_match(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     query_tuple = (
         "UPDATE matches SET approved_by_applicant = FALSE WHERE job_post_id = %s AND applicant_account_id = %s",
