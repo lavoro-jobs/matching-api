@@ -29,9 +29,45 @@ def get_matches_by_job_post(job_post_id: uuid.UUID):
         return []
 
 
+def get_match(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "SELECT * FROM matches WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return Match(**result["result"][0])
+    else:
+        return None
+
+
+def set_match_approved_by_applicant(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "UPDATE matches SET approved_by_applicant = TRUE WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1
+
+
 def reject_match(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     query_tuple = (
         "UPDATE matches SET approved_by_applicant = FALSE WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1
+
+
+def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        """
+        INSERT INTO applications (job_post_id, applicant_account_id)
+        VALUES (%s, %s)
+        """,
         (job_post_id, applicant_account_id),
     )
 
