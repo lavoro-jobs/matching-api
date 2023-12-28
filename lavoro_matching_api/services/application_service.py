@@ -38,6 +38,11 @@ def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
 def comment_application(
     job_post_id: uuid.UUID, applicant_account_id: uuid.UUID, current_recruiter_id: uuid.UUID, payload: CreateCommentDTO
 ):
-    # TODO: check if application exists
+    application = queries.get_application(job_post_id, applicant_account_id)
+    if not application:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Application not found",
+        )
 
     return queries.create_comment(job_post_id, applicant_account_id, current_recruiter_id, payload)
