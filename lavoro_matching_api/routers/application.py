@@ -16,3 +16,8 @@ def get_applications_to_job_post(job_post_id: uuid.UUID):
 @router.post("/approve-application/{job_post_id}/{applicant_account_id}")
 def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     return application_service.approve_application(job_post_id, applicant_account_id)
+
+
+@router.post("/create-application/{job_post_id}/{applicant_account_id}")
+def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    return application_service.create_application(job_post_id, applicant_account_id)
