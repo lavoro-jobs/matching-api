@@ -157,3 +157,26 @@ def get_comments_on_application(job_post_id: uuid.UUID, applicant_account_id: uu
         return [Comment(**row) for row in result["result"]]
     else:
         return []
+
+
+def get_comment(comment_id: uuid.UUID):
+    query_tuple = (
+        "SELECT * FROM comments WHERE id = %s",
+        (comment_id,),
+    )
+
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return Comment(**result["result"][0])
+    else:
+        return None
+
+
+def delete_comment(comment_id: uuid.UUID):
+    query_tuple = (
+        "DELETE FROM comments WHERE id = %s",
+        (comment_id,),
+    )
+
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1

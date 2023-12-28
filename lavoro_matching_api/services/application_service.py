@@ -58,3 +58,19 @@ def get_comments_on_application(job_post_id: uuid.UUID, applicant_account_id: uu
 
     comments = queries.get_comments_on_application(job_post_id, applicant_account_id)
     return comments
+
+
+def delete_comment(job_post_id: uuid.UUID, comment_id: uuid.UUID):
+    comment = queries.get_comment(comment_id)
+    if not comment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Comment not found",
+        )
+    if comment.job_post_id != job_post_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Comment does not belong to this job post",
+        )
+
+    return queries.delete_comment(comment_id)
