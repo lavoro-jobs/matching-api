@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import HTTPException, status
+from lavoro_library.model.matching_api.dtos import CreateCommentDTO
 
 from lavoro_matching_api.database import queries
 
@@ -20,3 +21,11 @@ def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
 
     queries.set_match_approved_by_applicant(job_post_id, applicant_account_id)
     return queries.create_application(job_post_id, applicant_account_id)
+
+
+def comment_application(
+    job_post_id: uuid.UUID, applicant_account_id: uuid.UUID, current_recruiter_id: uuid.UUID, payload: CreateCommentDTO
+):
+    # TODO: check if application exists
+
+    return queries.create_comment(job_post_id, applicant_account_id, current_recruiter_id, payload)
