@@ -37,3 +37,8 @@ def comment_application(
     return application_service.comment_application(
         job_post_id, applicant_account_id, current_recruiter_id, payload.comment_body
     )
+
+
+@router.get("/get-comments-on-application/{job_post_id}/{applicant_account_id}")
+def get_comments_on_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    return application_service.get_comments_on_application(job_post_id, applicant_account_id)
