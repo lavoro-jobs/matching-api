@@ -80,6 +80,18 @@ def get_applications_to_job_post(job_post_id: uuid.UUID):
         return []
 
 
+def get_created_applications_by_applicant(applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "SELECT * FROM applications WHERE applicant_account_id = %s",
+        (applicant_account_id,),
+    )
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return [Application(**row) for row in result["result"]]
+    else:
+        return []
+
+
 def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     query_tuple = (
         "UPDATE applications SET approved_by_company = TRUE WHERE job_post_id = %s AND applicant_account_id = %s",
