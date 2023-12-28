@@ -1,6 +1,6 @@
 import uuid
 
-from lavoro_library.model.matching_api.db_models import Application, Match
+from lavoro_library.model.matching_api.db_models import Application, Comment, Match
 from lavoro_matching_api.database import db
 
 
@@ -112,3 +112,48 @@ def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
 
     result = db.execute_one(query_tuple)
     return result["affected_rows"] == 1
+
+
+def get_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "SELECT * FROM applications WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return Application(**result["result"][0])
+    else:
+        return None
+
+
+def create_comment(
+    job_post_id: uuid.UUID, applicant_account_id: uuid.UUID, current_recruiter_id: uuid.UUID, comment_body: str
+):
+    query_tuple = (
+        """
+        INSERT INTO comments (account_id, job_post_id, applicant_account_id, comment_body)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (current_recruiter_id, job_post_id, applicant_account_id, comment_body),
+    )
+
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1
+
+
+def get_comments_on_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        """
+        SELECT * FROM comments
+        WHERE job_post_id = %s AND applicant_account_id = %s
+        ORDER BY created_on_date DESC
+        """,
+        (job_post_id, applicant_account_id),
+    )
+
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return [Comment(**row) for row in result["result"]]
+    else:
+        return []
