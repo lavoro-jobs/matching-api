@@ -25,6 +25,11 @@ def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID)
     return application_service.approve_application(job_post_id, applicant_account_id)
 
 
+@router.post("/reject-application/{job_post_id}/{applicant_account_id}")
+def reject_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    return application_service.reject_application(job_post_id, applicant_account_id)
+
+
 @router.post("/create-application/{job_post_id}/{applicant_account_id}")
 def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     return application_service.create_application(job_post_id, applicant_account_id)

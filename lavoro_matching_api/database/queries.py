@@ -101,6 +101,15 @@ def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID)
     return result["affected_rows"] == 1
 
 
+def reject_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    query_tuple = (
+        "UPDATE applications SET approved_by_company = FALSE WHERE job_post_id = %s AND applicant_account_id = %s",
+        (job_post_id, applicant_account_id),
+    )
+    result = db.execute_one(query_tuple)
+    return result["affected_rows"] == 1
+
+
 def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     query_tuple = (
         """

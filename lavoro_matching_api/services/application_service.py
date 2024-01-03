@@ -15,7 +15,25 @@ def get_created_applications_by_applicant(applicant_account_id: uuid.UUID):
 
 
 def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    application = queries.get_application(job_post_id, applicant_account_id)
+    if not application:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Application not found",
+        )
+
     return queries.approve_application(job_post_id, applicant_account_id)
+
+
+def reject_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
+    application = queries.get_application(job_post_id, applicant_account_id)
+    if not application:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Application not found",
+        )
+
+    return queries.reject_application(job_post_id, applicant_account_id)
 
 
 def create_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
