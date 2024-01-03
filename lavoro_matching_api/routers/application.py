@@ -20,12 +20,12 @@ def get_created_applications_by_applicant(applicant_account_id: uuid.UUID):
     return application_service.get_created_applications_by_applicant(applicant_account_id)
 
 
-@router.post("/approve-application/{job_post_id}/{applicant_account_id}")
+@router.patch("/approve-application/{job_post_id}/{applicant_account_id}")
 def approve_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     return application_service.approve_application(job_post_id, applicant_account_id)
 
 
-@router.post("/reject-application/{job_post_id}/{applicant_account_id}")
+@router.patch("/reject-application/{job_post_id}/{applicant_account_id}")
 def reject_application(job_post_id: uuid.UUID, applicant_account_id: uuid.UUID):
     return application_service.reject_application(job_post_id, applicant_account_id)
 
