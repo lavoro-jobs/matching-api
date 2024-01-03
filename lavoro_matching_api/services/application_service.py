@@ -6,8 +6,8 @@ from lavoro_library.model.matching_api.dtos import CreateCommentDTO
 from lavoro_matching_api.database import queries
 
 
-def get_applications_to_job_post(job_post_id: uuid.UUID):
-    return queries.get_applications_to_job_post(job_post_id)
+def get_applications_by_job_post(job_post_id: uuid.UUID):
+    return queries.get_applications_by_job_post(job_post_id)
 
 
 def get_created_applications_by_applicant(applicant_account_id: uuid.UUID):
