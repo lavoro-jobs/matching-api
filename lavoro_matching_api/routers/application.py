@@ -9,9 +9,9 @@ from lavoro_matching_api.services import application_service
 router = APIRouter(prefix="/application", tags=["application"])
 
 
-@router.get("/get-applications-to-job-post/{job_post_id}")
-def get_applications_to_job_post(job_post_id: uuid.UUID):
-    return application_service.get_applications_to_job_post(job_post_id)
+@router.get("/get-applications-by-job-post/{job_post_id}")
+def get_applications_by_job_post(job_post_id: uuid.UUID):
+    return application_service.get_applications_by_job_post(job_post_id)
 
 
 @router.get("/get-created-applications-by-applicant/{applicant_account_id}")
